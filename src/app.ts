@@ -1,14 +1,15 @@
-import express, { Application } from "express";
+import express, { Application, NextFunction, Request, Response } from "express";
 import { RoutesInterface } from "./interfaces/RoutesInterface";
 import routemap from "express-routemap";
 import chalk from "chalk";
 // import session from "express-session";
 import morgan from "morgan";
 import cors from "cors";
-import  Connection  from "./db/Connection";
+import Connection from "./db/Connection";
 // import { authRoutes } from "./routes/AuthRoutes";
 // import { authJWTMiddleware } from "./middleware/AuthJWTMiddleware";
 import dotenv from "dotenv";
+import resError from "./utils/ResError";
 
 dotenv.config();
 
@@ -67,6 +68,10 @@ class App extends Connection {
     this.app.use(express.json());
     this.app.use(cors());
     this.app.use(morgan("dev"));
+    this.app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
+      const { statusCode, message } = err;
+      resError(res, statusCode, message);
+    })
     // this.app.use(
     //   session({
     //     secret: "process.env.JWT_PRIVATE_KEY",
