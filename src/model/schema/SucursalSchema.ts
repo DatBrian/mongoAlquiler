@@ -1,5 +1,4 @@
 import { Collection, Db } from "mongodb";
-import { ClientError } from "../../utils";
 
 class SucursalSchema {
   public database: Db;
@@ -48,14 +47,13 @@ class SucursalSchema {
         },
       });
     } catch (error) {
-      throw new ClientError(`Error al generar el esquema ${this.collection}`);
+      console.error(`Error al generar el esquema ${this.collection}`);
+      throw error;
     }
   }
 
   public async createData(): Promise<void> {
     try {
-      console.log(this.Collection);
-
       await this.Collection.insertOne({
         id_sucursal: 1,
         nombre: "qerwerwerew",
@@ -63,7 +61,7 @@ class SucursalSchema {
         telefono: 3185767865,
       });
     } catch (error) {
-      throw new ClientError("error al generar la data");
+      throw error;
     }
   }
 }

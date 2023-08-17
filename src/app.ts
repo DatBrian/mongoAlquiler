@@ -11,6 +11,7 @@ import Connection from "./db/Connection";
 import dotenv from "dotenv";
 import resError from "./utils/ResError";
 import SetupDB from "./db/SetupDB";
+import { schemas } from "./model/schema";
 
 dotenv.config();
 
@@ -43,7 +44,8 @@ class App extends Connection {
       const connection = await this.connect();
       console.log(chalk.bgGreen.black("✔️  Conexión establecida 🔌 "));
       const setupDB = new SetupDB(this.getDatabase());
-      await setupDB.setupCollections();
+      const collections = schemas;
+      await setupDB.setupCollections(collections);
       console.log(
         chalk.blue(
           "---------------------------------------------------------------------------------"

@@ -1,6 +1,4 @@
 import { Db } from "mongodb";
-import SucursalSchema from "../model/schema/SucursalSchema";
-import { ClientError } from "../utils";
 import chalk from "chalk";
 
 class SetupDB {
@@ -10,10 +8,9 @@ class SetupDB {
     this.db = database;
   }
 
-  public async setupCollections(): Promise<void> {
+  public async setupCollections(entitiesA: Array<any>): Promise<void> {
     try {
-      const entities = [SucursalSchema];
-
+      const entities = entitiesA;
       for (const EntityClass of entities) {
         const entity = new EntityClass(this.db);
 
@@ -28,15 +25,15 @@ class SetupDB {
             chalk.bgYellowBright(`Colección ${entity.collection} omitida...`)
           );
         }
-        console.log();
-        console.log(
-          chalk.bgBlueBright(
-            chalk.black.bold("Colecciones actualizadas correctamente :D ")
-          )
-        );
       }
+      console.log();
+      console.log(
+        chalk.bgBlueBright(
+          chalk.black.bold("Colecciones actualizadas correctamente :D ")
+        )
+      );
     } catch (error) {
-      throw new ClientError("Error al configurar las entidades");
+      throw error;
     }
   }
 
