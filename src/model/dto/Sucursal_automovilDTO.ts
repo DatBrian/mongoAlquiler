@@ -1,7 +1,7 @@
 import { Expose } from "class-transformer";
 import { IsDefined } from "class-validator";
 
-export class SucursalAutoDTO {
+export class SucursalAutomovilDTO {
   @Expose({ name: "id_sucursal" })
   @IsDefined({
     message: () => {
@@ -24,7 +24,7 @@ export class SucursalAutoDTO {
   })
   cantidad_disponible: number;
 
-  constructor(data: Partial<SucursalAutoDTO>) {
+  constructor(data: Partial<SucursalAutomovilDTO>) {
     Object.assign(this, data);
     this.id_sucursal_id = 1;
     this.id_automovil_id = 1;

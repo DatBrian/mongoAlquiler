@@ -1,7 +1,7 @@
 import { Expose } from "class-transformer";
 import { IsDefined } from "class-validator";
 
-export class ReservasDTO {
+export class ReservaDTO {
   @Expose({ name: "id" })
   @IsDefined({
     message: () => {
@@ -67,7 +67,7 @@ export class ReservasDTO {
   })
   estado: string;
 
-  constructor(data: Partial<ReservasDTO>) {
+  constructor(data: Partial<ReservaDTO>) {
     Object.assign(this, data);
     this.id_reserva = 1;
     this.id_cliente_id = 1;

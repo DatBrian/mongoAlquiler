@@ -1,7 +1,7 @@
 import { Expose, Transform } from "class-transformer";
 import { IsDefined } from "class-validator";
 
-export class Devoluciones {
+export class Registro_devolucionDTO {
   @Expose({ name: "id" })
   @IsDefined({
     message: () => {
@@ -60,7 +60,7 @@ export class Devoluciones {
   })
   Monto_Adicional: number;
 
-  constructor(data: Partial<Devoluciones>) {
+  constructor(data: Partial<Registro_devolucionDTO>) {
     Object.assign(this, data);
     this.id_registro = 1;
     this.id_alquiler_id = 1;
