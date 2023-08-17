@@ -7,8 +7,9 @@ import { Registro_entregasDTO } from "./Registro_entregasDTO";
 import { ReservaDTO } from "./ReservaDTO";
 import { SucursalDTO } from "./SucursalDTO";
 import { SucursalAutomovilDTO } from "./Sucursal_automovilDTO";
+import { PostDTO } from "./PostDTO";
 
-const dtos = [
+export {
   AlquilerDTO,
   AutomovilDTO,
   ClienteDTO,
@@ -18,6 +19,5 @@ const dtos = [
   ReservaDTO,
   SucursalAutomovilDTO,
   SucursalDTO,
-];
-
-export { dtos };
+  PostDTO,
+};
