@@ -10,6 +10,7 @@ import Connection from "./db/Connection";
 // import { authJWTMiddleware } from "./middleware/AuthJWTMiddleware";
 import dotenv from "dotenv";
 import resError from "./utils/ResError";
+import SetupDB from "./db/SetupDB";
 
 dotenv.config();
 
@@ -41,6 +42,8 @@ class App extends Connection {
     try {
       const connection = await this.connect();
       console.log(chalk.bgGreen.black("✔️  Conexión establecida 🔌 "));
+      const setupDB = new SetupDB(this.getDatabase());
+      await setupDB.setupCollections();
       console.log(
         chalk.blue(
           "---------------------------------------------------------------------------------"
@@ -68,10 +71,12 @@ class App extends Connection {
     this.app.use(express.json());
     this.app.use(cors());
     this.app.use(morgan("dev"));
-    this.app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
-      const { statusCode, message } = err;
-      resError(res, statusCode, message);
-    })
+    this.app.use(
+      (err: any, _req: Request, res: Response, _next: NextFunction) => {
+        const { statusCode, message } = err;
+        resError(res, statusCode, message);
+      }
+    );
     // this.app.use(
     //   session({
     //     secret: "process.env.JWT_PRIVATE_KEY",
