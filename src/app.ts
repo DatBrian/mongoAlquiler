@@ -25,8 +25,8 @@ class App extends Connection {
     this.app = express();
     this.port = Number(process.env.PORT) || 5000;
     this.initMiddlewares();
-    this.initRoutes(routes);
     this.initConnection();
+    this.initRoutes(routes);
   }
 
   public getServer() {
