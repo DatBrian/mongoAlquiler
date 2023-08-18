@@ -8,7 +8,7 @@ class AlquilerRepository extends QueriesCommon {
 
   public async getAll(): Promise<any[]> {
     try {
-      return await this.getAll();
+      return await super.getAll();
     } catch (error) {
       throw new ClientError("Error al obtener los alquileres");
     }
