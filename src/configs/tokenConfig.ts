@@ -3,7 +3,17 @@ import { plainToClass, classToPlain } from "class-transformer";
 import dotenv from "dotenv";
 import { Router } from "express";
 import { SignJWT, jwtVerify } from "jose";
-import { AlquilerDTO, AutomovilDTO, ClienteDTO, EmpleadoDTO, Registro_devolucionDTO, Registro_entregasDTO, ReservaDTO, SucursalAutomovilDTO, SucursalDTO } from "../model/dto";
+import {
+  AlquilerDTO,
+  AutomovilDTO,
+  ClienteDTO,
+  EmpleadoDTO,
+  Registro_devolucionDTO,
+  Registro_entregasDTO,
+  ReservaDTO,
+  SucursalAutomovilDTO,
+  SucursalDTO,
+} from "../models/dto";
 
 dotenv.config("../");
 const appToken = Router();

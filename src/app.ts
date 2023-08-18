@@ -11,7 +11,7 @@ import Connection from "./db/Connection";
 import dotenv from "dotenv";
 import resError from "./utils/ResError";
 import SetupDB from "./db/SetupDB";
-import { schemas } from "./model/schema";
+import { schemas } from "./models/schemas";
 
 dotenv.config();
 

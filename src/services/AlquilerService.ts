@@ -1,5 +1,5 @@
 import { AlquilerRepository } from "../repositories";
-import { AlquilerDTO } from "../model/dto";
+import { AlquilerDTO } from "../models/dto";
 
 class AlquilerService {
   private readonly repository: AlquilerRepository;
@@ -13,7 +13,7 @@ class AlquilerService {
   }
 
   public async getById(id: string): Promise<AlquilerDTO> {
-    return await this.repository.getByIdI(id);
+    return await this.repository.getById(id);
   }
 
   public async insertOne(body: any): Promise<string | undefined> {

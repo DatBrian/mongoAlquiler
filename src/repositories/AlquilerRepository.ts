@@ -14,7 +14,7 @@ class AlquilerRepository extends QueriesCommon {
     }
   }
 
-  public async getByIdI(id: string): Promise<any> {
+  public async getById(id: string): Promise<any> {
     try {
       return await this.getOneById(id);
     } catch (error) {
