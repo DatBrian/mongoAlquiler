@@ -12,9 +12,9 @@ class SetupDB {
     try {
       const entities = entitiesA;
       for (const EntityClass of entities) {
-        const entity = new EntityClass(this.db);
+        const entity = await new EntityClass(this.db);
 
-        const collectionExist = await this.collectionExist(entity.collection);
+        const collectionExist = await this.collectionExist(entity.entity);
 
         if (!collectionExist) {
           await entity.generateCollection();
@@ -22,7 +22,7 @@ class SetupDB {
         } else {
           console.log();
           console.log(
-            chalk.bgYellowBright(`Colección ${entity.collection} omitida...`)
+            chalk.bgYellowBright(`Colección ${entity.entity} omitida...`)
           );
         }
       }
@@ -33,6 +33,7 @@ class SetupDB {
         )
       );
     } catch (error) {
+      console.log(error);
       throw error;
     }
   }

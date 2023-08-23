@@ -2,18 +2,18 @@ import { Collection, Db } from "mongodb";
 
 class Registro_devolucionSchema {
   public database: Db;
-  public collection: string;
+  public entity: string;
   public Collection: Collection;
 
   constructor(database: Db) {
     this.database = database;
-    this.collection = "registro_devolucion";
-    this.Collection = database.collection(this.collection);
+    this.entity = "registro_devolucion";
+    this.Collection = database.collection(this.entity);
   }
 
   public async generateCollection(): Promise<void> {
     try {
-      await this.database.createCollection(this.collection, {
+      await this.database.createCollection(this.entity, {
         capped: true,
         size: 8000,
         max: 50,
@@ -69,7 +69,7 @@ class Registro_devolucionSchema {
         },
       });
     } catch (error) {
-      console.error(`Error al generar el esquema ${this.collection}`);
+      console.error(`Error al generar el esquema ${this.entity}`);
       throw error;
     }
   }

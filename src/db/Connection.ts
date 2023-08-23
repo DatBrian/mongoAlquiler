@@ -11,7 +11,7 @@ class Connection {
   }
 
   private getUri(): string {
-    return `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_NAME}.qogxj7f.mongodb.net/`;
+    return `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_NAME}.qogxj7f.mongodb.net/?retryWrites=true&w=majority`;
   }
 
   public async connect(): Promise<void> {

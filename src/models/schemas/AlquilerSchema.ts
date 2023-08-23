@@ -2,18 +2,18 @@ import { Collection, Db } from "mongodb";
 
 class AlquilerSchema {
   public database: Db;
-  public collection: string;
+  public entity: string;
   public Collection: Collection;
 
   constructor(database: Db) {
     this.database = database;
-    this.collection = "alquiler";
-    this.Collection = database.collection(this.collection);
+    this.entity = "alquiler";
+    this.Collection = database.collection(this.entity);
   }
 
   public async generateCollection(): Promise<void> {
     try {
-      await this.database.createCollection(this.collection, {
+      await this.database.createCollection(this.entity, {
         capped: true,
         size: 16000,
         max: 100,
