@@ -1,5 +1,5 @@
 import { plainToClass, classToPlain } from "class-transformer";
-import { DTO } from "../configs/tokenConfig";
+import { DTO } from "../helpers/tokenConfig";
 import { Response, NextFunction } from "express";
 import { validate } from "class-validator";
 
