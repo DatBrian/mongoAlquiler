@@ -8,6 +8,8 @@ import Registro_entregaSchema from "./Registro_entregaSchema";
 import ReservaSchema from "./ReservaSchema";
 import Sucursal_automovilSchema from "./Sucursal_automovilSchema";
 import UsuariosSchema from "./UsuariosSchema";
+import AutoIncrementSchema from "./AutoincrementSchema";
+import RolesSchema from "./RolesSchema";
 
 const schemas = [
   AlquilerSchema,
@@ -19,7 +21,9 @@ const schemas = [
   Registro_entregaSchema,
   ReservaSchema,
   Sucursal_automovilSchema,
-  UsuariosSchema
+  UsuariosSchema,
+  AutoIncrementSchema,
+  RolesSchema
 ];
 
 export { schemas };
