@@ -1,78 +1,70 @@
-import "reflect-metadata";
-import { plainToClass, classToPlain } from "class-transformer";
-import dotenv from "dotenv";
-import { Router } from "express";
 import { SignJWT, jwtVerify } from "jose";
-import {
-  AlquilerDTO,
-  AutomovilDTO,
-  ClienteDTO,
-  EmpleadoDTO,
-  Registro_devolucionDTO,
-  Registro_entregasDTO,
-  ReservaDTO,
-  SucursalAutomovilDTO,
-  SucursalDTO,
-} from "../models/dto";
+import Connection from "../db/Connection";
+import { Db, ObjectId } from "mongodb";
+import dotenv from "dotenv";
+import { Request, Response, NextFunction } from "express";
+dotenv.config();
 
-dotenv.config("../");
-const appToken = Router();
-const appVerify = Router();
+class TokenConfig {
+  private db: Db;
 
-const DTO = (p1) => {
-  const match = {
-    sucursal: SucursalDTO,
-    alquiler: AlquilerDTO,
-    automovil: AutomovilDTO,
-    empleado: EmpleadoDTO,
-    reserva: ReservaDTO,
-    cliente: ClienteDTO,
-    sucuautomovil: SucursalAutomovilDTO,
-    regisdevo: Registro_devolucionDTO,
-    regisent: Registro_entregasDTO,
-    mongo: Error,
-  };
-  const inst = match[p1];
-  if (!inst) throw { status: 404, message: "Token solicitado no valido" };
-  return {
-    atributos: plainToClass(inst, {}, { ignoreDecorators: true }),
-    class: inst,
-  };
-};
+  constructor() {
+    this.db = new Connection().getDatabase();
+  }
 
-appToken.use("/:collection", async (req, res) => {
-  try {
-    let inst = DTO(req.params.collection).atributos;
+  async crearToken(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    if (Object.keys(req.body).length === 0) {
+      res.status(400).send({ message: "Datos no enviados" });
+      return;
+    }
+
+    const result = await this.db.collection("usuario").findOne(req.body);
+
+    if (!result) {
+      res.status(401).send({ message: "Usuario no encontrado" });
+      return;
+    }
+
     const encoder = new TextEncoder();
-    const jwtconstructor = new SignJWT(Object.assign({}, classToPlain(inst)));
-    const jwt = await jwtconstructor
+    const id = result._id.toString();
+    const jwtConstructor = await new SignJWT({ id: id })
       .setProtectedHeader({ alg: "HS256", typ: "JWT" })
       .setIssuedAt()
-      .setExpirationTime("30m")
-      .sign(encoder.encode(process.env.JWT_PRIVATE_KEY));
-    res.status(201).send({ status: 201, jwt });
-  } catch (error) {
-    res
-      .status(404)
-      .send({ status: 404, message: "Token solicitado no existente" });
-  }
-});
+      .setExpirationTime("3h")
+      .sign(encoder.encode(process.env.JWT_SECRET));
 
-appVerify.use("/", async (req, res, next) => {
-  const { authorization } = req.headers;
-  if (!authorization)
-    return res.status(400).send({ status: 400, token: "Token no enviado" });
-  try {
-    const encoder = new TextEncoder();
-    const jwtData = await jwtVerify(
-      authorization,
-      encoder.encode(process.env.JWT_PRIVATE_KEY)
-    );
-    req.data = jwtData;
+    req.data = { status: 200, message: jwtConstructor };
     next();
-  } catch (error) {
-    res.status(498).send({ status: 498, token: "Token caducado" });
   }
-});
 
-export { appToken, appVerify, DTO };
+  async validarToken(req: Request, token: any): Promise<any> {
+    try {
+      const encoder = new TextEncoder();
+      const jwtData = await jwtVerify(
+        token,
+        encoder.encode(process.env.JWT_SECRET)
+      );
+
+      const usuarioData = await this.db.collection("usuario").findOne({
+        _id: new ObjectId(jwtData.payload.id),
+        [`permisos.${req.baseUrl}`]: `${req.headers["accept-version"]}`,
+      });
+
+      if (!usuarioData) {
+        throw new Error("Usuario no válido para este token");
+      }
+
+      const { _id, permisos, ...usuario } = usuarioData;
+      return usuario;
+    } catch (error:any) {
+      console.error("Error al validar el token:", error.message);
+      return null;
+    }
+  }
+}
+
+export default TokenConfig;

@@ -3,8 +3,8 @@ import rateLimit from "express-rate-limit";
 
 export const configGET = () => {
   const options: any = {
-    windowMs: 30 * 1000,
-    max: 5,
+    windowMs: 1 * 60 * 1000,
+    max: 30,
     headers: true,
     skip: (req: Request, res: Response): boolean | void => {
       if (
